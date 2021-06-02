@@ -1,9 +1,17 @@
 import React,{useState} from 'react';
-import { Keyboard, TouchableWithoutFeedback,KeyboardAvoidingView, Platform,Modal} from 'react-native';
+import {
+   Keyboard,
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView,
+     Platform,
+     Modal, 
+     ActivityIndicator
+    } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import StatusBarPage from '../../Components/StatusBarPage';
-import Menu from '../../Components/Menu';
 import {Feather} from '@expo/vector-icons';
+import Menu from '../../Components/Menu';
+import api from '../../services/api';
 import {
   ContainerLogo, 
   Logo,
@@ -20,11 +28,33 @@ import {
 import ModalLink from '../../Components/ModalLink';
 
 export default function Home() {
-  const [input,SetInput] = useState();
+  const [loading, setLoading] = useState(false);
+  const [input,SetInput] = useState('');
   const [modalVisible,SetModalVisible] = useState(false);
+  const [data,setData] = useState({});
 
-  function handleShortLink(){
-    SetModalVisible(true);
+  async function handleShortLink(){
+    setLoading(true);
+    try {
+      const response = await api.post('/shorten',
+      {
+        long_url:input,
+      });
+      setData(response.data);
+      
+      SetModalVisible(true);
+      Keyboard.dismiss();
+      setLoading(false);
+      SetInput('');
+    } catch(e){
+      console.log(e.message);
+      alert("Ops...parece que algo deu errado");
+      Keyboard.dismiss();
+      SetInput('');
+      setLoading(false);
+    }
+
+    
   }
 
  return (
@@ -64,7 +94,13 @@ export default function Home() {
           />
        </ContainerInput>
        <ButtonLink onPress={handleShortLink}>
-         <ButtonLinkText>Gerar Link</ButtonLinkText>
+         {
+           loading ? (
+            <ActivityIndicator color="#121212" size={24} />
+           ):(
+              <ButtonLinkText>Gerar Link</ButtonLinkText>
+           )
+         }
        </ButtonLink>
      </ContainerContent>
      </KeyboardAvoidingView>
@@ -73,7 +109,7 @@ export default function Home() {
      transparent 
      animationType="slide"
      >
-     <ModalLink onClose={()=>SetModalVisible(false)}/>
+     <ModalLink onClose={()=>SetModalVisible(false)} data={data}/>
 
        </Modal>
      </LinearGradient>

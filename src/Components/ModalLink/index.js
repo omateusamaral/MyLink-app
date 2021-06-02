@@ -12,15 +12,15 @@ import {
   ShortLinkArea,
   ShortLinkUrl
 } from './styles';
-export default function ModalLink({onClose}) {
+export default function ModalLink({onClose,data}) {
   function copyLink(){
-    Clipboard.setString('MATEUSLINDO');
+    Clipboard.setString(data.link);
     alert('Link copiado');
   }
   async function handleShare(){
     try {
       const result = await Share.share({
-        message:`Link: MATEUSLINDO`
+        message:`Link: ${data.link}`
       });
 
       if(result.action === Share.sharedAction){
@@ -67,7 +67,7 @@ export default function ModalLink({onClose}) {
         <Title>
           Link encurtado
         </Title>
-        <LongUrl numberOfLines={1}>https://github.com/omateusamaral</LongUrl>
+        <LongUrl numberOfLines={1}>{data.long_url}</LongUrl>
 
         <ShortLinkArea activeOpacity={1}
         onPress={copyLink}
@@ -75,7 +75,7 @@ export default function ModalLink({onClose}) {
           <ShortLinkUrl
           numberOfLines={1}
           >
-          https://git.co/amaral
+          {data.link}
           </ShortLinkUrl>
           <TouchableOpacity onPress={copyLink}>
             <Feather
