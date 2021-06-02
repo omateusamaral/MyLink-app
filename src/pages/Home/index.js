@@ -1,5 +1,5 @@
-import React from 'react';
-import { View,Text} from 'react-native';
+import React,{useState} from 'react';
+import { Keyboard, TouchableWithoutFeedback,KeyboardAvoidingView, Platform,Modal} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import StatusBarPage from '../../Components/StatusBarPage';
 import Menu from '../../Components/Menu';
@@ -17,8 +17,18 @@ import {
    ButtonLinkText
   
   } from './styles';
+import ModalLink from '../../Components/ModalLink';
+
 export default function Home() {
+  const [input,SetInput] = useState();
+  const [modalVisible,SetModalVisible] = useState(false);
+
+  function handleShortLink(){
+    SetModalVisible(true);
+  }
+
  return (
+   <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
    <LinearGradient
    colors={['#1DDBB9','#132742']}
    style={{flex:1,justifyContent:'center'}}
@@ -28,12 +38,16 @@ export default function Home() {
      backgroundColor="#1ddbb9"
      />
      <Menu/>
+     <KeyboardAvoidingView
+     behavior={Platform.OS==='android'?'padding':'position'}
+     enabled={true}
+     >
      <ContainerLogo>
        <Logo source={require('../../assets/Logo.png')} resizeMode="contain" />
      </ContainerLogo>
      <ContainerContent>
        <Title>MyLink</Title>
-       <SubTitle>Cole seu link para encutar</SubTitle>
+       <SubTitle>Cole seu link para encurtar</SubTitle>
 
        <ContainerInput>
          <BoxIcon>
@@ -42,13 +56,27 @@ export default function Home() {
          <Input
           placeholder="Cole seu link aqui..."
           placeholderTextColor="white"
+          autoCapitalize="none"
+          autoCorrect={false}
+          KeyboardType="url"
+          value={input}
+          onChangeText={(text)=>SetInput(text)}
           />
        </ContainerInput>
-       <ButtonLink>
+       <ButtonLink onPress={handleShortLink}>
          <ButtonLinkText>Gerar Link</ButtonLinkText>
        </ButtonLink>
      </ContainerContent>
+     </KeyboardAvoidingView>
+     <Modal
+     visible={modalVisible}
+     transparent 
+     animationType="slide"
+     >
+     <ModalLink onClose={()=>SetModalVisible(false)}/>
 
+       </Modal>
      </LinearGradient>
+     </TouchableWithoutFeedback>
   );
 }
