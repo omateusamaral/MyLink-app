@@ -26,6 +26,7 @@ import {
   
   } from './styles';
 import ModalLink from '../../Components/ModalLink';
+import {saveLink} from '../../utils/storeLinks';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,9 @@ export default function Home() {
       setData(response.data);
       
       SetModalVisible(true);
+
+      // OK
+      saveLink('listalinks', response.data);
       Keyboard.dismiss();
       setLoading(false);
       SetInput('');
