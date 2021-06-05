@@ -3,7 +3,7 @@
 
 VÍDEO INTRODUTÓRIO DO APP
 :-------------------------:
-https://user-images.githubusercontent.com/37390930/120872269-8f8a0f00-c574-11eb-800f-6dd58061464b.mp4
+https://www.linkedin.com/feed/update/urn:li:activity:6806721610188382208/
 
 <p>O app MyLink foi criado para ajudar pessoas que queiram encurtar links longos
 e mante-los salvos no celular, para assim resgata-los no futuros. Basta você digitar/colar o link que queira 
